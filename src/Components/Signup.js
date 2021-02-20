@@ -1,23 +1,17 @@
-import React,{ Component }from 'react';
-import {Avatar, Button, Grid,Paper,TextField, Typography,Link} from '@material-ui/core';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-// import FormControlLabel from '@material-ui/core/FormControlLabel';
-// import Radio from '@material-ui/core/Radio';
-// import RadioGroup from '@material-ui/core/RadioGroup';
-// import FormControl from '@material-ui/core/FormControl';
-// import FormLabel from '@material-ui/core/FormLabel';
-// import Checkbox from '@material-ui/core/Checkbox';
-import axios from 'axios';
+import React from 'react';
+import {Avatar, Button, Grid,TextField, Typography} from '@material-ui/core';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
-  var paperStyle={padding:'30px 20px',height:'60vh',width:300,margin:"0 auto"};
-     var avatarStyle={backgroundColor:'  #5b9aa0'};
+import axios from 'axios';
+     var avatarStyle={backgroundColor:'black', margin:25};
      const btnStyle={margin:'8px 0'};
      const headerStyle={margin:0};
-  
+     const birthDateStyle = {color : "white"}
+     const validEmailRegex = RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
+     
+
 
 class Signup extends React.Component{
-   
-    
  
 
     constructor()
@@ -33,35 +27,45 @@ class Signup extends React.Component{
         role:'',
         vehicleNumber:'',
         location:'',
-        activityStatus:''
-
+        activityStatus:'',
+        errors: {
+            fullName: '',
+            email: '',
+            password: '',
+          }
         
-        }
+    }
         this.changeName=this.changeName.bind(this);
         this.changeEmail=this.changeEmail.bind(this);
         this.changePhone=this.changePhone.bind(this);
         this.changePassword=this.changePassword.bind(this);
         this.changeConfirmPassword=this.changeConfirmPassword.bind(this);
+        this.onSubmit=this.onSubmit.bind(this);
         this.yesHandler = this.yesHandler.bind(this);
         this.changeRole=this.changeRole.bind(this);
         this.changeVehicleNumber=this.changeVehicleNumber.bind(this);
         this.changeLocation=this.changeLocation.bind(this);
         this.changeActivityStatus=this.changeActivityStatus.bind(this);
 
-        this.onSubmit=this.onSubmit.bind(this);
     }
+
+    
 
     changeName(event)
     {
         this.setState({
         name: event.target.value
         })
+
     }
     changeEmail(event)
     {
         this.setState({
         email: event.target.value
         })
+        this.setState ({error : validEmailRegex.test(event.target.value)  ? ''
+        : 'Email is not valid!' })
+        
     }
     changePhone(event)
     {
@@ -86,7 +90,8 @@ class Signup extends React.Component{
           clickedYes: !this.state.clickedYes
         });
       }
-      changeRole(event){
+
+    changeRole(event){
         this.setState({
         selectedOption: event.target.value
         })
@@ -107,10 +112,45 @@ class Signup extends React.Component{
         })
     }
 
+    // handleChange = (event) => {
+    //     event.preventDefault();
+    //     const { name, value } = event.target;
+    //     let errors = this.state.errors;
+    
+    //     switch (name) {
+    //       case 'fullName': 
+    //         errors.fullName = 
+    //           value.length < 5
+    //             ? 'Full Name must be 5 characters long!'
+    //             : '';
+    //         break;
+    //       case 'email': 
+    //         errors.email = 
+    //           validEmailRegex.test(value)
+    //             ? ''
+    //             : 'Email is not valid!';
+    //         break;
+    //       case 'password': 
+    //         errors.password = 
+    //           value.length < 8
+    //             ? 'Password must be 8 characters long!'
+    //             : '';
+    //         break;
+    //       default:
+    //         break;
+    //     }
+    
+    //     this.setState({errors, [name]: value});
+    //   }
 
 onSubmit(event)
 {
-    event.preventDefault()
+    event.preventDefault();
+    if(this.handleValidation()){
+        alert("Form Submitted");
+    }else{
+        alert("Form has errors");
+    }
     const registered =
     {
         name:this.state.name,
@@ -138,15 +178,19 @@ onSubmit(event)
         vehicleNumber:'',
         location:'',
         activityStatus:''
+      
 
         
     })
+    
 
   
 }
 
     render()
     {
+        const {errors} = this.state;
+
         const radioYes = this.state.clickedYes ? <div>
         <TextField label='vehicleNumber' placeholder="Enter Vehicle Number" fullWidth required
         onChange={this.changeVehicleNumber} value={this.state.vehicleNumber}/>
@@ -156,46 +200,54 @@ onSubmit(event)
         onChange={this.changeActivityStatus} value={this.state.activityStatus}/>
         </div> : null ;
 
-
     return(
         <div>
         <Grid>
-            <Paper elevation={10} style={paperStyle}>
+            
                 <Grid align="center">
-                <Avatar  style={avatarStyle}><AddCircleOutlineIcon/></Avatar>
+                <Avatar style= {avatarStyle} ><PersonAddIcon/></Avatar>
                <h2 style={headerStyle}> Sign Up</h2>
                <Typography variant='caption'>Create an account now!!</Typography>
                </Grid>
-               <form onSubmit={this.onSubmit}>
-               <TextField label='Name' placeholder="Enter Name" fullWidth required onChange={this.changeName}
-               value={this.state.name}/>
+               <form onSubmit={this.onSubmit} noValidate>
+               <TextField label='Name' placeholder="Enter Name" fullWidth required onChange={this.changeName} noValidate value={this.state.name} {...this.state.errors.fullName.length > 0 && 
+                <span className='error'>{errors.fullName}</span>}/>
                <TextField label='Email' placeholder="Enter Email" fullWidth required
-               onChange={this.changeEmail} value={this.state.email}/>
-             
+               onChange={this.changeEmail} noValidate value={this.state.email} {...this.state.errors.email.length > 0 && 
+                <span className='error'>{errors.email}</span>}/>
                <TextField label='Phone Number' placeholder="Enter Phone Number" fullWidth required
-                onChange={this.changePhone} value={this.state.phone}/>
-               <TextField label='Password' placeholder="Enter Password" fullWidth required
-                onChange={this.changePassword} value={this.state.password}/>
-               <TextField label='Confirm Password' placeholder="Confirm Password" fullWidth required
+                onChange={this.changePhone} value={this.state.phone} />
+               <TextField  label='Password' placeholder="Enter Password" type="password" fullWidth required
+                onChange={this.changePassword} noValidate value={this.state.password} {...this.state.errors.password.length > 0 && 
+                <span className='error'>{errors.password}</span>}/>
+               <TextField label='Confirm Password' placeholder="Confirm Password" type="password" fullWidth required
                 onChange={this.changeConfirmPassword} value={this.state.confirmpassword}/>
+                <TextField label="Brth Date" placeholder="" type="date" fullWidth required style = {birthDateStyle} onChange={this.changeBirthDate} value={this.state.birthDate}/>
+                <TextField label='Confirm Password' placeholder="Confirm Password" type="password" fullWidth required onChange={this.changeConfirmPassword} value={this.state.confirmpassword}/>
+                <br></br><br></br>
+
+
+
                 <div className="radio"> Do you wish to work as delivery executive?
-                <label>                    
-                    <input type="radio" value="option2" 
-                    clickedYes={this.state.clickedYes}
-                    onClick={this.yesHandler}
+                    <label>                    
+                        <input type="radio" value="option2" 
+                        clickedYes={this.state.clickedYes}
+                        onClick={this.yesHandler}
                         checked={this.state.selectedOption === 'option2'} 
-                        onChange={this.changeRole} />
-                    
-                </label>
+                        onChange={this.changeRole} /> 
+                     </label>
+
                 {radioYes}
-                </div>  
                
+                </div> 
+                <br></br>
+                 
+
        
       
       <Button type='submit' variant="contained" color='primary' style={btnStyle} fullWidth required value='Submit'> Sign Up</Button>
       </form>
-            </Paper>
-        </Grid>
+    </Grid>
         </div>
     )
     }
