@@ -1,21 +1,14 @@
-import React,{Component} from 'react';
-import { Avatar, Button, Grid, Paper, TextField, Typography, Link } from '@material-ui/core';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import React from 'react';
+import './Login.css';
+import { Avatar, Button, Grid, TextField,Box } from '@material-ui/core';
+import PersonIcon from '@material-ui/icons/Person';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import axios from 'axios';
-import { Formik, Form, Field, ErrorMessage } from 'formik'
+import { Formik,Field } from 'formik'
 import * as Yup from 'yup'
 
-
-const paperStyle = { padding: 20, height: '60vh', width: 300, margin: "0 auto" }
-const avatarStyle = { backgroundColor: '  #5b9aa0' }
-const btnStyle = { margin: '8px 0' }
-const GridStyle={margin:'0px 0 0 0 '}
-
-
-
-const msg={backgroundColor:'red'}
+const avatarStyle = { backgroundColor: 'black', fontsize:'large'}
 const initialValues = {
     username: '',
     password: '',
@@ -30,8 +23,6 @@ const onSubmit = (values, props) => {
     props.resetForm();
     console.log(props);
 }
-
-
 
 class Login extends React.Component{
     constructor()
@@ -65,85 +56,67 @@ class Login extends React.Component{
     }
 
     onSubmit(event)
-{
+    {
     event.preventDefault()
     const loggedin =
     {
-        
         email:this.state.email,
         password:this.state.password
-      
-
     }
     axios.post('http://localhost:5000/app/login',loggedin)
     .then(res=>console.log(res.data));
     
     this.setState({
         email:'',
-        password:''
-      
-        
+        password:''        
     })
-
-  
 }
-   
-    
-    
-    render()
+   render()
     {
-
- 
-
     return (
-        <div>
-        <Grid style={GridStyle}>
-            <Paper elevation={10} style={paperStyle}>
-                <Grid align="center">
-                    <Avatar style={avatarStyle}><LockOutlinedIcon /></Avatar>
-                    <h2> Sign In</h2>
-                </Grid>
+        <div className = "loginStyle">  
+           <Box >
+           <Grid align="center">
+                <Avatar style={avatarStyle}>
+                    <PersonIcon />
+                </Avatar>
+                <h2> Sign In</h2>
+            </Grid>
               
-                <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
-                    {(props) => (
+            <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={validationSchema}>
+                {(props) => (
                      
-                     <form onSubmit={this.onSubmit}>
-                            <Field as={TextField} label='Username'  placeholder="Enter username" fullWidth required
-                                //  helperText={<ErrorMessage name='email' style={msg} />} 
+                    <form onSubmit={this.onSubmit}>
+                        <Field as={TextField}  label='Username'  placeholder="Enter username" fullWidth required p={500}
                                 onChange={this.changeEmail}
                                 value={this.state.email}/>
                             
-                            <Field as={TextField} label='Password'  placeholder="Enter password" type="password" fullWidth required
-                                //  helperText={<ErrorMessage style={msg}/>}
+                        <Field as={TextField} label='Password'  placeholder="Enter password" type="password" fullWidth required
                                 onChange={this.changePassword}
-                                value={this.state.password}/>
+                                value={this.state.password}
+                        />
                             
-                            <Field as={FormControlLabel}
-                                name='remember'
-                                control={
-                                    <Checkbox
+                        <Field as={FormControlLabel}
+                            name='remember'
+                            control={
+                            <Checkbox
+                                color="primary"
+                            />}
+                            label="Remember Me"
+                        />
+                        <Button type='submit' value='Submit'variant="contained" color='primary' fullWidth required> 
+                            Sign In
+                        </Button>
+                    </form>
 
-                                        color="primary"
-                                    />
-                                }
-                                label="Remember Me"
-                            />
-                            <Button type='submit' value='Submit'variant="contained" color='primary' style={btnStyle} fullWidth required> Sign In</Button>
-                        </form>
-
-                    )}
-                </Formik>
-            
-              {/* <Typography>Do you have an account?
-         <Link href="#" onClick={() => handleChange('event', 1)}>
-                        Sign Up
-          </Link>
-                </Typography> */}
-            </Paper>
-        </Grid>
+                )}
+            </Formik>
+            </Box>          
+                       
+     
         </div>
       
     )}
-                            }
+}
             
 export default Login;

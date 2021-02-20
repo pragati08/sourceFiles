@@ -6,14 +6,17 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Login from '../Components/Login';
 import Signup from '../Components/Signup';
+import shadows from '@material-ui/core/styles/shadows';
+// import './Form.css';
 
-
+const tabStyle = {margin :45}
 const SignInOutContainer = () => {
     const [value, setValue] = useState(0);
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
-    const paperStyle = { width: 340, margin: "20px auto" }
+
+    const paperStyle = { width: 400, margin: "100px auto", shadows:0 }
     function TabPanel(props) {
         const { children, value, index, ...other } = props;
 
@@ -33,9 +36,10 @@ const SignInOutContainer = () => {
         );
     }
     return (
-
-        <Paper style={paperStyle}>
-            <Tabs
+        <>
+        {/* <Paper style={paperStyle}> */}
+        <div className="divStyle">
+        <Tabs style = {tabStyle}
                 value={value}
                 indicatorColor="primary"
                 textColor="primary"
@@ -50,7 +54,11 @@ const SignInOutContainer = () => {
             <TabPanel value={value} index={1}>
                 <Signup />
             </TabPanel>
-        </Paper>
+
+        </div>
+            
+        {/* </Paper> */}
+        </>
     )
 
 }

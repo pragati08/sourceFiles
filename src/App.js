@@ -1,13 +1,13 @@
 
 import './App.css';
-import Login from './Components/Login';
-import Signup from './Components/Signup';
-import SignInOutContainer from './Container/Forms';
+// import Login from './Components/Login';
+// import Signup from './Components/Signup';
+import ModalForm from './Container/ModalForm';
+
 function App() {
   return (
     <div className="App">
-    <SignInOutContainer/>
-   
+    <ModalForm />
     </div>
   );
 }
