@@ -1,0 +1,32 @@
+#navbar {
+background-color: white;
+}
+
+
+a{
+  color: black;
+}
+.navbar-nav{
+ 
+  background-color:white;
+  color: black;
+  
+}
+
+#collapsibleNavbar{
+  padding-left: 10%;
+
+}
+
+#nav-name{
+  color: black;
+   padding-right:1%; 
+   font-size: x-large;
+}
+   @media (max-width: 800px){
+       .mx-30{
+           margin-bottom: 30px;
+       }
+   }
+   
+}

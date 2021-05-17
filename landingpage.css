@@ -1,0 +1,13 @@
+#header-logo{
+    display: inline;
+    height: 24px;
+    width: 104px;
+    /* border: 2px solid black; */
+}
+
+#header-text{
+    color: #5f6368;
+    font-size: 30px;
+    padding-left:20px;
+    /* border: 2px solid black; */
+}
